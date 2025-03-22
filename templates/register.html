@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RegisterPage</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<!-- 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
+
+</head>
+<body>
+    <div id="main">
+        <div id="abc">
+            <div id="form-body">
+                <h1>Registration</h1>
+                <form action="{{ url_for('register') }}" method="post">
+                    <div class="form">
+                        <label for="username" class="form-label">username</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="your name">
+                    </div>
+                    <div class="form">
+                        <label for="email"class="form-label">Email</label>
+                           <input type="email" class="form-control" name="email" id="email" placeholder="abc@gmail.com"><br><br>
+                    </div>
+                    <div class="form">
+                        <label for="password" class="form-label">Password</label><br>
+                        <input type="password" class="form-control" name="passward" id="password" placeholder="passward"><br><br>
+
+                        </div>
+                            <!-- Qualification -->
+                            <div class="form">
+                                <label for="qualification" class="form-label">Qualification</label>
+                                <input type="text" class="form-control" id="qualification" name="qualification" required>
+                            </div>
+
+                            <!-- Date of Birth -->
+                            <div class="form">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" name="dob" required>
+                            </div>
+
+<!-- button of submit type -->
+ <div style="text-align: center;">
+                        <button type="submit" class="btn btn-primary">Create</button><br>
+                        
+
+                        Already have account?  <a href="{{ url_for('login')}}">Login</a>
+                    </div>
+                    
+                
+                </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
