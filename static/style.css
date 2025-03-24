@@ -23,3 +23,16 @@
 
 
 }
+
+/* Apply styles only to the admin dashboard */
+.admin-dashboard table td,
+.admin-dashboard table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-dashboard table {
+    table-layout: auto;
+    width: 100%;
+}

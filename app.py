@@ -1,20 +1,32 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from models import db
-from routers import user_bp  # Import Blueprint for user dashboard
-from auth import auth_bp  # Import Blueprint for authentication
+from config import Config
+from routes import app_routes  # Import routes
 
+# Initialize Flask app
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///quiz_app.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = "your_secret_key"
+app.config.from_object(Config)  # Load configurations
 
+# Initialize database
 db.init_app(app)
 
-# Register Blueprints
-app.register_blueprint(user_bp)  # User routes
-app.register_blueprint(auth_bp)  # Authentication routes
+with app.app_context():
+    db.create_all()
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # Create tables if they don't exist
+# Configure Flask-Login
+login_manager = LoginManager(app)
+login_manager.login_view = "login"  # Redirect to login page if not authenticated
+
+@login_manager.user_loader
+def load_user(user_id):
+    from models import User
+    return User.query.get(int(user_id))
+
+# Register routes from routes.py
+app.register_blueprint(app_routes)
+
+# Run the application
+if __name__ == "__main__":
     app.run(debug=True)
