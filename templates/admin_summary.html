@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Admin Dashboard Summary</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            <div class="card p-3 text-center">
+                <h5>Total Users</h5>
+                <h3 class="text-primary">{{ total_users - 1 }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card p-3 text-center">
+                <h5>Total Quizzes</h5>
+                <h3 class="text-success">{{ total_quizzes }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card p-3 text-center">
+                <h5>Total Questions</h5>
+                <h3 class="text-warning">{{ total_questions }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <h4 class="text-center">Most Attempted Quizzes</h4>
+            <div class="d-flex justify-content-center">
+                <img src="data:image/png;base64,{{ quiz_attempts_chart }}" class="img-fluid rounded shadow-lg" alt="Most Attempted Quizzes">
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12 mb-4">
+            <h4 class="text-center">Quiz Attempts Per Subject</h4>
+            <div class="d-flex justify-content-center">
+                <img src="data:image/png;base64,{{ subject_attempts_chart }}" class="img-fluid rounded shadow-lg" alt="Quiz Attempts Per Subject">
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="text-center">Highest & Lowest Scores Per Quiz</h4>
+            <div class="d-flex justify-content-center">
+                <img src="data:image/png;base64,{{ extremes_chart }}" class="img-fluid rounded shadow-lg" alt="Highest & Lowest Scores">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
