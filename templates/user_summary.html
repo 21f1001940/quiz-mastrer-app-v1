@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Your Performance Summary</h2>
+
+    <!-- Stats -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card p-3 text-center">
+                <h5>Total Quizzes Attempted</h5>
+                <h3 class="text-primary">{{ total_quizzes }}</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-3 text-center">
+                <h5>Average Score</h5>
+                <h3 class="text-success">{{ avg_score }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <h4 class="text-center"></h4>
+            <img src="data:image/png;base64,{{ subject_chart }}" class="img-fluid" alt="Quiz Attempts Per Subject">
+        </div>
+        <div class="col-md-6">
+            <h4 class="text-center"></h4>
+            <img src="data:image/png;base64,{{ score_chart }}" class="img-fluid" alt="Quiz Scores Over Time">
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h4 class="text-center"></h4>
+            <img src="data:image/png;base64,{{ extremes_chart }}" class="img-fluid" alt="Highest and Lowest Scores Per Quiz">
+        </div>
+    </div>
+</div>
+{% endblock %}

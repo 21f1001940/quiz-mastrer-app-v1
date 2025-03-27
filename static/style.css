@@ -12,17 +12,17 @@
     margin: auto;
 }
 
-#form-body{
+/* #form-body{
     width:330px;
     height: 500px;
     margin: auto;
     border: 1px solid grey;
     margin-top: 180px;
     border-radius: 5px;
-    padding: 60px;
+    padding: 60px; */
 
 
-}
+/* } */
 
 /* Apply styles only to the admin dashboard */
 .admin-dashboard table td,
