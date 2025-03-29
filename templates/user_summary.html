@@ -19,8 +19,30 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-10 mb-4">
+                <h4 class="text-center"></h4>
+                <div class="d-flex justify-content-center">
+                    <img src="data:image/png;base64,{{ subject_chart }}" class="img-fluid rounded shadow-lg" alt="Quiz Attempts Per Subject" style="max-width: 90%;">
+                </div>
+            </div>
+            <div class="col-md-10 mb-4">
+                <h4 class="text-center"></h4>
+                <div class="d-flex justify-content-center">
+                    <img src="data:image/png;base64,{{ score_chart }}" class="img-fluid rounded shadow-lg" alt="Quiz Scores Over Time" style="max-width: 90%;">
+                </div>
+            </div>
+            <div class="col-md-10 mb-4">
+                <h4 class="text-center"></h4>
+                <div class="d-flex justify-content-center">
+                    <img src="data:image/png;base64,{{ extremes_chart }}" class="img-fluid rounded shadow-lg" alt="Highest and Lowest Scores Per Quiz" style="max-width: 90%;">
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Charts -->
+    <!-- Charts
     <div class="row mt-4">
         <div class="col-md-6">
             <h4 class="text-center"></h4>
@@ -38,5 +60,5 @@
             <img src="data:image/png;base64,{{ extremes_chart }}" class="img-fluid" alt="Highest and Lowest Scores Per Quiz">
         </div>
     </div>
-</div>
+</div> -->
 {% endblock %}
