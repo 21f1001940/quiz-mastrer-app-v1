@@ -52,7 +52,7 @@
 
 <!-- JavaScript for Countdown Timer -->
 <script>
-    let timeLeft = {{ remaining_time | default=(0) }}; // Get time from Flask
+    let timeLeft = {{ remaining_time | default(0) }}; // Get time from Flask
     const timerElement = document.getElementById("timer");
     const timeLeftInput = document.getElementById("time_left_input");
 

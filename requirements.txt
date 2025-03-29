@@ -1,0 +1,9 @@
+python -m venv venv 
+
+venv\Scripts\activate.bat   
+
+pip install flask flask-sqlalchemy flask-wtf flask-login flask-bcrypt flask-migrate
+                            
+pip install matplot
+
+python app.py

@@ -443,57 +443,9 @@ def user_dashboard():
     quizzes = Quiz.query.order_by(Quiz.date_of_quiz.desc()).all()
     return render_template('user_dashboard.html', quizzes=quizzes)
 
-@app_routes.route('/start_quiz/<int:quiz_id>')
-@login_required
-def start_quiz(quiz_id):
-    """Redirects user to the quiz page."""
-    quiz = Quiz.query.get_or_404(quiz_id)
 
-    return redirect(url_for('app_routes.quiz_page', quiz_id=quiz.id,q_index=0))
 
-# user_quiz routes...............
 
-from datetime import datetime, timedelta
-from flask import session
-
-@app_routes.route('/quiz_page/<int:quiz_id>/<int:q_index>')
-def quiz_page(quiz_id, q_index):
-    quiz = Quiz.query.get(quiz_id)
-    
-    if 'quiz_start_time' not in session:
-        session['quiz_start_time'] = datetime.now().isoformat()
-
-    start_time = datetime.fromisoformat(session['quiz_start_time'])
-    end_time = start_time + timedelta(minutes=quiz.time_duration)
-    remaining_time = (end_time - datetime.now()).total_seconds()
-
-    if remaining_time <= 0:
-        return redirect(url_for('app_routes.submit_quiz', quiz_id=quiz.id))
-
-    question = Question.query.filter_by(quiz_id=quiz_id).offset(q_index).first()
-
-    return render_template(
-        'quiz_page.html', quiz=quiz, question=question, q_index=q_index, 
-        remaining_time=int(remaining_time)
-    )
-
-@app_routes.route('/quiz/<int:quiz_id>/<int:q_index>/navigate', methods=['POST'])
-def navigate_question(quiz_id, q_index):
-    """Handles moving to the next, previous question, or submitting the quiz."""
-    
-    direction = request.form.get("direction")  
-    total_questions = Question.query.filter_by(quiz_id=quiz_id).count()
-
-    if direction == "next":
-        next_q_index = min(q_index + 1, total_questions - 1)
-    elif direction == "prev":
-        next_q_index = max(q_index - 1, 0)  
-    elif direction == "submit":
-        return redirect(url_for('app_routes.submit_quiz', quiz_id=quiz_id))  
-    else:
-        next_q_index = q_index  # Stay on current question if something unexpected happens
-
-    return redirect(url_for('app_routes.quiz_page', quiz_id=quiz_id, q_index=next_q_index))
 
 
 
@@ -742,7 +694,7 @@ def admin_summary():
         img.seek(0)
         return base64.b64encode(img.getvalue()).decode()
 
-    plt.figure(figsize=(6, 5))
+    plt.figure(figsize=(7, 7))
     plt.bar([q[0] for q in quiz_attempts], [q[1] for q in quiz_attempts], color='blue')
     plt.xlabel("Quiz Name")
     plt.ylabel("Attempts")
@@ -751,13 +703,13 @@ def admin_summary():
     quiz_attempts_chart = plot_to_base64()
     plt.close()
 
-    plt.figure(figsize=(6, 5))
+    plt.figure(figsize=(7, 7))
     plt.pie([s[1] for s in subject_attempts], labels=[s[0] for s in subject_attempts], autopct='%1.1f%%', colors=['red', 'blue', 'green', 'orange', 'purple'])
     plt.title("Quiz Attempts Per Subject")
     subject_attempts_chart = plot_to_base64()
     plt.close()
 
-    plt.figure(figsize=(6, 5))
+    plt.figure(figsize=(6, 6))
     quizzes = [s[0] for s in score_extremes]
     high_scores = [s[1] for s in score_extremes]
     low_scores = [s[2] for s in score_extremes]
@@ -779,7 +731,60 @@ def admin_summary():
                            subject_attempts_chart=subject_attempts_chart,
                            extremes_chart=extremes_chart)
 
+# user_quiz routes...............
 
+
+from datetime import datetime, timedelta
+from flask import session
+
+@app_routes.route('/quiz_page/<int:quiz_id>/<int:q_index>')
+def quiz_page(quiz_id, q_index):
+    quiz = Quiz.query.get(quiz_id)
+    
+    if 'quiz_start_time' not in session:
+        session['quiz_start_time'] = datetime.now().isoformat()
+
+    start_time = datetime.fromisoformat(session['quiz_start_time'])
+    end_time = start_time + timedelta(minutes=quiz.time_duration)
+    remaining_time = (end_time - datetime.now()).total_seconds()
+
+    if remaining_time <= 0:
+        return redirect(url_for('app_routes.submit_quiz', quiz_id=quiz.id))
+
+    question = Question.query.filter_by(quiz_id=quiz_id).offset(q_index).first()
+
+    return render_template(
+        'quiz_page.html', quiz=quiz, question=question, q_index=q_index, 
+        remaining_time=int(remaining_time)
+    )
+
+@app_routes.route('/start_quiz/<int:quiz_id>')
+@login_required
+def start_quiz(quiz_id):
+    """Redirects user to the quiz page."""
+    quiz = Quiz.query.get_or_404(quiz_id)
+
+    return redirect(url_for('app_routes.quiz_page', quiz_id=quiz.id,q_index=0))
+
+
+
+@app_routes.route('/quiz/<int:quiz_id>/<int:q_index>/navigate', methods=['POST'])
+def navigate_question(quiz_id, q_index):
+    """Handles moving to the next, previous question, or submitting the quiz."""
+    
+    direction = request.form.get("direction")  
+    total_questions = Question.query.filter_by(quiz_id=quiz_id).count()
+
+    if direction == "next":
+        next_q_index = min(q_index + 1, total_questions - 1)
+    elif direction == "prev":
+        next_q_index = max(q_index - 1, 0)  
+    elif direction == "submit":
+        return redirect(url_for('app_routes.submit_quiz', quiz_id=quiz_id))  
+    else:
+        next_q_index = q_index  # Stay on current question if something unexpected happens
+
+    return redirect(url_for('app_routes.quiz_page', quiz_id=quiz_id, q_index=next_q_index))
 
 @app_routes.route('/quiz/<int:quiz_id>/submit', methods=['GET'])
 @login_required
@@ -791,10 +796,10 @@ def submit_quiz(quiz_id):
     responses = session.get('quiz_responses', {})
 
     # Ensure quiz wasn't already submitted
-    existing_score = Score.query.filter_by(user_id=user_id, quiz_id=quiz_id).first()
-    if existing_score:
-        flash("You've already submitted this quiz.", "info")
-        return redirect(url_for('app_routes.user_dashboard'))
+    # existing_score = Score.query.filter_by(user_id=user_id, quiz_id=quiz_id).first()
+    # if existing_score:
+    #     flash("You've already submitted this quiz.", "info")
+    #     return redirect(url_for('app_routes.user_dashboard'))
 
     question_ids = [int(q_id) for q_id in responses.keys()]
     questions = Question.query.filter(Question.id.in_(question_ids)).all()
@@ -810,5 +815,5 @@ def submit_quiz(quiz_id):
     session.pop('quiz_responses', None)
     session.pop('quiz_start_time', None)
 
-    flash(f"Quiz submitted! Your score: {score}/{len(questions)}", "success")
+    flash(f"Quiz submitted! Your score: {score}/{quiz.total_qsn}", "success")
     return redirect(url_for('app_routes.user_dashboard'))
